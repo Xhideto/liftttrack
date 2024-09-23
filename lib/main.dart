@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'datab/signup_activity.dart';
+import 'navigation/exer.dart';
 
 void main() => runApp(LiftTrackApp());
 
@@ -11,6 +12,7 @@ class LiftTrackApp extends StatelessWidget {
       home: LoginScreen(),
       routes: {
         '/signup': (context) => SignUpScreen(),
+        '/home': (context) => HomeScreen(),
       },
     );
   }
@@ -58,21 +60,21 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Handle login logic
+                        Navigator.pushNamed(context, '/home');
                     },
                     child: Text('Login'),
                   ),
-                    TextButton(
-                      onPressed: () {
-                        // Handle forgot password logic
-                      },
-                      child: Text('Forgot your password?'),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
-                        },
-                        child: Text("Don't have an account?")
+                  TextButton(
+                    onPressed: () {
+                      // Handle forgot password logic
+                    },
+                    child: Text('Forgot your password?'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/signup');
+                    },
+                    child: Text("Don't have an account?"),
                   ),
                 ],
               ),
