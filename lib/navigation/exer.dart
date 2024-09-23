@@ -8,10 +8,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Progress'),
-    Text('Exercise'),
-    Text('Profile'),
+  static List<Widget> _widgetOptions = <Widget>[
+    ProgressPage(),
+    ExercisePage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
+        automaticallyImplyLeading: false, // This removes the back button
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -48,6 +49,33 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
+    );
+  }
+}
+
+class ProgressPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Progress Page'),
+    );
+  }
+}
+
+class ExercisePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Exercise Page'),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Profile Page'),
     );
   }
 }
