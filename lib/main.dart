@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'datab/signup_activity.dart';
-import 'navigation/exer.dart';
+import 'navigation/home.dart';
 
 void main() => runApp(LiftTrackApp());
 
