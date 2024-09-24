@@ -1,6 +1,9 @@
+// lib/exercise_page.dart
 import 'package:flutter/material.dart';
+import 'package:lifttrack/exercise/exercard.dart'; // Import the ExerciseCard
+import 'package:lifttrack/exercise/upper.dart';
 
-import 'bar.dart';
+import 'bar.dart'; // Import the UpperBodyPage
 
 class ExercisePage extends StatefulWidget {
   @override
@@ -25,7 +28,7 @@ class _ExercisePageState extends State<ExercisePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('EXERCISES'),
-        automaticallyImplyLeading: true, // This adds the back button
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,7 +38,10 @@ class _ExercisePageState extends State<ExercisePage> {
             ExerciseCard(
               title: 'UPPER',
               onTap: () {
-                // Navigate to upper body exercises page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UpperBodyPage()),
+                );
               },
             ),
             SizedBox(height: 20),
@@ -51,41 +57,6 @@ class _ExercisePageState extends State<ExercisePage> {
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-      ),
-    );
-  }
-}
-
-class ExerciseCard extends StatelessWidget {
-  final String title;
-  final VoidCallback onTap;
-
-  ExerciseCard({required this.title, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          alignment: Alignment.center,
-          height: 100,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-            ),
-          ),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
       ),
     );
   }
