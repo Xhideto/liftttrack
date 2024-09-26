@@ -52,6 +52,24 @@ class ShoulderPage extends StatelessWidget {
             Text(
               'Shoulder press strong! Push bar straight up, brush your ears with it. Keep your core tight and back strong. Control the weight, smooth moves only!',
             ),
+            SizedBox(height: 20),
+            Text(
+              'TARGETED MUSCLES',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Image.asset('assets/images/spm.png'), // Add your image asset
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add your tracking functionality here
+                },
+                child: Text('Track'),
+              ),
+            ),
           ],
         ),
       ),

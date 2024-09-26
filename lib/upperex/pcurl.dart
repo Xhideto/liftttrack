@@ -52,6 +52,24 @@ class PreacherPage extends StatelessWidget {
             Text(
               'Preacher curls are all about the biceps! Focus on squeezing your biceps at the top of the movement and lowering the weight with control. Keep your core tight and your back straight to avoid swinging the weight.',
             ),
+            SizedBox(height: 20),
+            Text(
+              'TARGETED MUSCLES',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Image.asset('assets/images/pcm.png'), // Add your image asset
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add your tracking functionality here
+                },
+                child: Text('Track'),
+              ),
+            ),
           ],
         ),
       ),
