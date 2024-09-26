@@ -1,6 +1,9 @@
 // lib/upper_body_page.dart
 import 'package:flutter/material.dart';
 import 'exercard.dart'; // Import the ExerciseCard
+import 'package:lifttrack/upperex/bpress.dart';
+import 'package:lifttrack/upperex/spress.dart';
+import 'package:lifttrack/upperex/pcurl.dart';
 
 class UpperBodyPage extends StatelessWidget {
   @override
@@ -17,21 +20,30 @@ class UpperBodyPage extends StatelessWidget {
             ExerciseCard(
               title: 'Bench Press',
               onTap: () {
-                // Navigate to Bench Press details page
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BenchPage()),
+                );
               },
             ),
             SizedBox(height: 20),
             ExerciseCard(
               title: 'Shoulder Press',
               onTap: () {
-                // Navigate to Shoulder Press details page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ShoulderPage())
+                );
               },
             ),
             SizedBox(height: 20),
             ExerciseCard(
               title: 'Preacher Curl',
               onTap: () {
-                // Navigate to Preacher Curl details page
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PreacherPage())
+                );
               },
             ),
           ],
