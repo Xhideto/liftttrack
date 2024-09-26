@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lifttrack/exercise/exercard.dart'; // Import the ExerciseCard
 import 'package:lifttrack/exercise/upper.dart';
+import 'package:lifttrack/exercise/lower.dart';
 
 import 'bar.dart'; // Import the UpperBodyPage
 
@@ -48,7 +49,10 @@ class _ExercisePageState extends State<ExercisePage> {
             ExerciseCard(
               title: 'LOWER',
               onTap: () {
-                // Navigate to lower body exercises page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LowerBodyPage()),
+                );
               },
             ),
           ],

@@ -15,16 +15,16 @@ class LowerBodyPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ExerciseCard(
-              title: 'Bench Press',
+              title: 'RDL',
               onTap: () {
-                // Navigate to Bench Press details page
+                // Navigate to RDL details page
               },
             ),
             SizedBox(height: 20),
             ExerciseCard(
-              title: 'Shoulder Press',
+              title: 'Squat',
               onTap: () {
-                // Navigate to Shoulder Press details page
+                // Navigate to Squat details page
               },
             ),
             SizedBox(height: 20),
