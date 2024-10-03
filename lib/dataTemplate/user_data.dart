@@ -1,31 +1,60 @@
 class User {
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String userName;
-  final String email;
-  final String phoneNumber;
+  String id;
+  String firstName;
+  String lastName;
+  String userName;
+  String email;
+  String phoneNumber;
   String password;
-  final String? bio;
-  final String? profileImageUri;
-  final int authEnabled;
-  final int deleted;
+  String? bio;
+  String? pfpURI;
+  int isAuthenticated;
+  int isDeleted;
 
   User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.userName,
-    required this.email,
-    required this.phoneNumber,
-    required this.password,
+    this.id = '0',
+    this.firstName = '',
+    this.lastName = '',
+    this.userName = '',
+    this.email = '',
+    this.phoneNumber = '',
+    this.password = '',
     this.bio,
-    this.profileImageUri,
-    required this.authEnabled,
-    required this.deleted,
+    this.pfpURI,
+    this.isAuthenticated = 0,
+    this.isDeleted = 0,
   });
 
   // Factory constructor to create a User from a JSON object
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      userName: json['userName'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      password: json['password'],
+      bio: json['bio'],
+      pfpURI: json['profileImageUri'],
+      isAuthenticated: json['authEnabled'],
+      isDeleted: json['deleted'],);
+  }
+
+  // Method to convert a User object to a JSON object
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'userName': userName,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'password': password,
+      'bio': bio,
+      'profileImageUri': pfpURI,
+      'authEnabled': isAuthenticated,
+      'deleted': isDeleted,
+    };
+  }
+}

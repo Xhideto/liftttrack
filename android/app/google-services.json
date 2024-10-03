@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "591575926737",
+    "project_id": "lifttrack-backend",
+    "storage_bucket": "lifttrack-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591575926737:android:b2329396454b31154442f0",
+        "android_client_info": {
+          "package_name": "com.example.liftttrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFHA1uoto2VqoYCQHgvdxfV7AcLxTTeGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
