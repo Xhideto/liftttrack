@@ -1,8 +1,9 @@
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,6 @@ class _VideoPageState extends State<VideoPage> {
   VideoPlayerController? _controller;
   File? _videoFile;
   final ImagePicker _picker = ImagePicker();
-  final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
   List<File> _frames = [];
 
   Future<void> _pickVideo() async {
@@ -44,11 +44,16 @@ class _VideoPageState extends State<VideoPage> {
     final outputPattern = '${outputDir.path}/frame_%03d.png';
     final command = '-i ${_videoFile!.path} -vf fps=30 $outputPattern';
 
-    await _flutterFFmpeg.execute(command);
-
-    final frameFiles = outputDir.listSync().where((item) => item.path.endsWith('.png')).toList();
-    setState(() {
-      _frames = frameFiles.map((item) => File(item.path)).toList();
+    await FFmpegKit.executeAsync(command, (session) async {
+      final returnCode = await session.getReturnCode();
+      if (ReturnCode.isSuccess(returnCode)) {
+        final frameFiles = outputDir.listSync().where((item) => item.path.endsWith('.png')).toList();
+        setState(() {
+          _frames = frameFiles.map((item) => File(item.path)).toList();
+        });
+      } else {
+        print('Frame extraction failed');
+      }
     });
   }
 
