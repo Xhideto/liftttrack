@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'exer.dart';
+import 'exer.dart'; // Import the ExercisePage
+import 'profile.dart'; // Import the ProfilePage
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,30 +12,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Widget> _widgetOptions = <Widget>[
     ProgressPage(),
-    Placeholder(), // Placeholder for ExercisePage
-    ProfilePage(),
+    ExercisePage(), // Add ExercisePage
+    ProfilePage(), // Add ProfilePage
   ];
 
   void _onItemTapped(int index) {
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ExercisePage()),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Progress'),
-        automaticallyImplyLeading: false, // This removes the back button
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -52,15 +41,6 @@ class ProgressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text('Progress Page'),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Profile Page'),
     );
   }
 }
