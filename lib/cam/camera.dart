@@ -122,54 +122,56 @@ class _VideoPageState extends State<VideoPage> {
         title: Text('Record and Play Video'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _videoFile == null
-                ? Text('No video recorded')
-                : _controller != null && _controller!.value.isInitialized
-                ? Transform.rotate(
-              angle: 90 * pi / 180, // Rotate by 90 degrees
-              alignment: Alignment.center, // Rotate around the center
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.8, // Set the maximum width to 80% of the screen width
-                  maxHeight: MediaQuery.of(context).size.height * 0.6, // Set the maximum height to 60% of the screen height
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _videoFile == null
+                  ? Text('No video recorded')
+                  : _controller != null && _controller!.value.isInitialized
+                  ? Transform.rotate(
+                angle: 90 * pi / 180, // Rotate by 90 degrees
+                alignment: Alignment.center, // Rotate around the center
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.height * 10.8, // Swap width and height
+                    maxHeight: MediaQuery.of(context).size.height * 20.0, // Swap width and height
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: _controller!.value.aspectRatio * (MediaQuery.of(context).size.height / MediaQuery.of(context).size.width), // Adjust aspect ratio
+                    child: VideoPlayer(_controller!),
+                  ),
                 ),
-                child: AspectRatio(
-                  aspectRatio: _controller!.value.aspectRatio,
-                  child: VideoPlayer(_controller!),
+              )
+                  : Container(),
+              SizedBox(height: 50),
+              ElevatedButton(
+                onPressed: _pickVideo,
+                child: Text('Record Video'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _extractFrames,
+                child: Text('Extract Frames'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _uploadVideo,
+                child: Text('Upload Video'),
+              ),
+              SizedBox(height: 20),
+              _frames.isEmpty
+                  ? Text('No frames extracted')
+                  : Expanded(
+                child: ListView.builder(
+                  itemCount: _frames.length,
+                  itemBuilder: (context, index) {
+                    return Image.file(_frames[index]);
+                  },
                 ),
               ),
-            )
-                : Container(),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickVideo,
-              child: Text('Record Video'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _extractFrames,
-              child: Text('Extract Frames'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _uploadVideo,
-              child: Text('Upload Video'),
-            ),
-            SizedBox(height: 20),
-            _frames.isEmpty
-                ? Text('No frames extracted')
-                : Expanded(
-              child: ListView.builder(
-                itemCount: _frames.length,
-                itemBuilder: (context, index) {
-                  return Image.file(_frames[index]);
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
