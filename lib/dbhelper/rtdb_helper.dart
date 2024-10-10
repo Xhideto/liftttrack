@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:liftttrack/dataTemplate/user_data.dart';
+import '../dataTemplate/user_data.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class RTDBHelper {
