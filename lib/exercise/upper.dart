@@ -1,9 +1,9 @@
 // lib/upper_body_page.dart
 import 'package:flutter/material.dart';
 import 'exercard.dart'; // Import the ExerciseCard
-import 'package:lifttrack/upperex/bpress.dart';
-import 'package:lifttrack/upperex/spress.dart';
-import 'package:lifttrack/upperex/pcurl.dart';
+import '../upperex/bpress.dart';
+import '../upperex/spress.dart';
+import '../upperex/pcurl.dart';
 
 class UpperBodyPage extends StatelessWidget {
   @override

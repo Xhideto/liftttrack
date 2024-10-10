@@ -1,8 +1,8 @@
 // lib/exercise_page.dart
 import 'package:flutter/material.dart';
-import 'package:lifttrack/exercise/exercard.dart'; // Import the ExerciseCard
-import 'package:lifttrack/exercise/upper.dart';
-import 'package:lifttrack/exercise/lower.dart';
+import '../exercise/exercard.dart'; // Import the ExerciseCard
+import '../exercise/upper.dart';
+import '../exercise/lower.dart';
 
 import 'bar.dart'; // Import the UpperBodyPage
 
