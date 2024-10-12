@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_video_info/flutter_video_info.dart';
+import 'dart:math';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -23,12 +25,41 @@ class _VideoPageState extends State<VideoPage> {
     if (pickedFile != null) {
       setState(() {
         _videoFile = File(pickedFile.path);
-        _controller = VideoPlayerController.file(_videoFile!)
-          ..initialize().then((_) {
-            setState(() {});
-            _controller!.play();
-          });
       });
+
+      if (_videoFile != null) {
+        final videoOrientation = await FlutterVideoInfo().getVideoInfo(_videoFile!.path);
+        if (videoOrientation != null && videoOrientation.orientation == 90) {
+          // Rotate the video 90 degrees clockwise
+          final directory = await getApplicationDocumentsDirectory();
+          final outputFilePath = '${directory.path}/rotated_video.mp4';
+          final session = await FFmpegKit.executeAsync('-i ${_videoFile!.path} -vf transpose=1 $outputFilePath');
+          final returnCode = await session.getReturnCode();
+          if (ReturnCode.isSuccess(returnCode)) {
+            // Delete the original file
+            _videoFile?.delete();
+
+            setState(() {
+              _videoFile = File(outputFilePath);
+            });
+          } else {
+            print('Failed to rotate video');
+          }
+        }
+      }
+
+      // Initialize the VideoPlayerController after video rotation
+      if (_videoFile != null) {
+        _controller = VideoPlayerController.file(_videoFile!)
+          ..initialize().then((_) async {
+            setState(() {});
+            if (_controller != null) {
+              _controller!.play();
+            }
+            // Automatically extract frames after video is loaded
+            await _extractFrames();
+          });
+      }
     }
   }
 
@@ -90,44 +121,51 @@ class _VideoPageState extends State<VideoPage> {
         title: Text('Record and Play Video'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _videoFile == null
-                ? Text('No video recorded')
-                : _controller!.value.isInitialized
-                ? AspectRatio(
-              aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(_controller!),
-            )
-                : Container(),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickVideo,
-              child: Text('Record Video'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _extractFrames,
-              child: Text('Extract Frames'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _uploadVideo,
-              child: Text('Upload Video'),
-            ),
-            SizedBox(height: 20),
-            _frames.isEmpty
-                ? Text('No frames extracted')
-                : Expanded(
-              child: ListView.builder(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _videoFile == null
+                  ? Text('No video recorded')
+                  : _controller != null && _controller!.value.isInitialized
+                  ? Transform.rotate(
+                angle: 90 * pi / 180, // Rotate by 90 degrees
+                alignment: Alignment.center, // Rotate around the center
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.height * 10.8, // Swap width and height
+                    maxHeight: MediaQuery.of(context).size.height * 20.0, // Swap width and height
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: _controller!.value.aspectRatio *
+                        (MediaQuery.of(context).size.height / MediaQuery.of(context).size.width), // Adjust aspect ratio
+                    child: VideoPlayer(_controller!),
+                  ),
+                ),
+              )
+                  : Container(),
+              SizedBox(height: 50),
+              ElevatedButton(
+                onPressed: _pickVideo,
+                child: Text('Record Video'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _uploadVideo,
+                child: Text('Upload Video'),
+              ),
+              SizedBox(height: 20),
+              _frames.isEmpty
+                  ? Text('No frames extracted')
+                  : ListView.builder(
+                shrinkWrap: true,
                 itemCount: _frames.length,
                 itemBuilder: (context, index) {
                   return Image.file(_frames[index]);
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
