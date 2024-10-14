@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import '../dataTemplate/user.dart'; // Import the User class and createUser function
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
@@ -27,7 +26,7 @@ class SignUpScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min,  // Ensure column takes minimum space
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextFormField(
@@ -70,28 +69,19 @@ class SignUpScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       if (passwordController.text == confirmPasswordController.text) {
-                        var response = await http.put(
-                          Uri.parse('http://127.0.0.1:8000/user/create'),
-                          headers: <String, String>{
-                            'Content-Type': 'application/json; charset=UTF-8',
-                          },
-                          body: jsonEncode(<String, String>{
-                            'firstName': firstNameController.text,
-                            'lastName': lastNameController.text,
-                            'userName': usernameController.text,
-                            'email': emailController.text,
-                            'phoneNumber': contactNumberController.text,
-                            'password': passwordController.text,
-                          }),
-                        );
-
-                        if (response.statusCode == 201) {
-                          // Successfully created user
+                        try {
+                          await createUser(
+                            firstNameController.text,
+                            lastNameController.text,
+                            usernameController.text,
+                            contactNumberController.text,
+                            emailController.text,
+                            passwordController.text,
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('User created successfully!')),
                           );
-                        } else {
-                          // Failed to create user
+                        } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Failed to create user.')),
                           );
