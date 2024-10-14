@@ -9,8 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_video_info/flutter_video_info.dart';
 import 'dart:math';
 
-
 class VideoPage extends StatefulWidget {
+  const VideoPage({super.key});
+
   @override
   _VideoPageState createState() => _VideoPageState();
 }
@@ -119,7 +120,10 @@ class _VideoPageState extends State<VideoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Record and Play Video'),
+        title: Text('RECORD AND PLAY VIDEO', style: TextStyle(color: Colors.white)), // White text
+        backgroundColor: Colors.deepOrange.shade400,
+        elevation: 3,
+        automaticallyImplyLeading: true,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -127,13 +131,13 @@ class _VideoPageState extends State<VideoPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _videoFile == null
-                  ? Text('No video recorded')
+                  ? const Text('No video recorded')
                   : _controller != null && _controller!.value.isInitialized
                   ? Transform.rotate(
                 angle: 90 * pi / 180, // Rotate by 90 degrees
                 alignment: Alignment.center, // Rotate around the center
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(
+                  constraints: BoxConstraints (
                     maxWidth: MediaQuery.of(context).size.height * 10.8, // Swap width and height
                     maxHeight: MediaQuery.of(context).size.height * 20.0, // Swap width and height
                   ),
@@ -144,24 +148,33 @@ class _VideoPageState extends State<VideoPage> {
                 ),
               )
                   : Container(),
-              SizedBox(height: 50),
+              const SizedBox(height: 60),
               ElevatedButton(
                 onPressed: _pickVideo,
-                child: Text('Record Video'),
+                child: Text('RECORD VIDEO', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)), // White text
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber[800],
+                ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _extractFrames,
-                child: Text('Extract Frames'),
+                child: Text('EXTRACT FRAMES', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)), // White text
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber[800],
+                ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _uploadVideo,
-                child: Text('Upload Video'),
+                child: Text('UPLOAD VIDEO', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)), // White text
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber[800],
+                ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 50),
               _frames.isEmpty
-                  ? Text('No frames extracted')
+                  ? const Text('No frames extracted')
                   : Expanded(
                 child: ListView.builder(
                   itemCount: _frames.length,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'exer.dart'; // Import the ExercisePage
 import 'profile.dart'; // Import the ProfilePage
+import 'progress.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -10,10 +13,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    ProgressPage(),
-    ExercisePage(), // Add ExercisePage
-    ProfilePage(), // Add ProfilePage
+  static final List<Widget> _widgetOptions = <Widget>[
+    const ProgressPage(),
+    const ExercisePage(), // Add ExercisePage
+    const ProfilePage(), // Add ProfilePage
   ];
 
   void _onItemTapped(int index) {
@@ -37,10 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ProgressPage extends StatelessWidget {
+  const ProgressPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Progress Page'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PROGRESS', style: TextStyle(color: Colors.white)), // White text
+        backgroundColor: Colors.deepOrange.shade400,
+        elevation: 0,
+        automaticallyImplyLeading: false, // Remove the back button
+      ),
     );
   }
 }
@@ -49,7 +59,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
-  CustomBottomNavigationBar({
+  const CustomBottomNavigationBar({super.key,
     required this.selectedIndex,
     required this.onItemTapped,
   });
