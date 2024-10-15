@@ -1,5 +1,6 @@
 // lib/upperex/spress.dart
 import 'package:flutter/material.dart';
+import 'package:lifttrack/cam/cameraSP.dart';
 
 class ShoulderPage extends StatelessWidget {
   @override
@@ -65,7 +66,10 @@ class ShoulderPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Add your tracking functionality here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VideoPage())
+                  );
                 },
                 child: Text('Track'),
               ),
