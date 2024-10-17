@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-
-import 'exer.dart';
+import 'exer.dart'; // Import the ExercisePage
+import 'profile.dart'; // Import the ProfilePage
+// import 'progress.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -10,32 +13,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    ProgressPage(),
-    Placeholder(), // Placeholder for ExercisePage
-    ProfilePage(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const ProgressPage(),
+    const ExercisePage(), // Add ExercisePage
+    const ProfilePage(), // Add ProfilePage
   ];
 
   void _onItemTapped(int index) {
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ExercisePage()),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Progress'),
-        automaticallyImplyLeading: false, // This removes the back button
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -48,19 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ProgressPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Progress Page'),
-    );
-  }
-}
+  const ProgressPage({super.key});
 
-class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Profile Page'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PROGRESS', style: TextStyle(color: Colors.white)), // White text
+        backgroundColor: Colors.deepOrange.shade400,
+        elevation: 0,
+        automaticallyImplyLeading: false, // Remove the back button
+      ),
     );
   }
 }
@@ -69,7 +59,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
-  CustomBottomNavigationBar({
+  const CustomBottomNavigationBar({super.key,
     required this.selectedIndex,
     required this.onItemTapped,
   });
