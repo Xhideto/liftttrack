@@ -112,6 +112,9 @@ class ShoulderPage extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => VideoPage())
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
                   child: Text(
                     'TRACK',
                     style: TextStyle(
@@ -119,9 +122,6 @@ class ShoulderPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.white, // Text color
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
                   ),
                 ),
               ),
