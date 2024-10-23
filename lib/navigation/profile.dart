@@ -58,7 +58,7 @@ class ProfileHeader extends StatelessWidget {
   final File? _image;
   final Function _uploadImage;
 
-  ProfileHeader(this._image, this._uploadImage);
+  const ProfileHeader(this._image, this._uploadImage, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +101,8 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileInfo extends StatelessWidget {
+  const ProfileInfo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -113,6 +115,8 @@ class ProfileInfo extends StatelessWidget {
 }
 
 class ProfileButtons extends StatelessWidget {
+  const ProfileButtons({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -141,7 +145,7 @@ class ProfileButton extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  ProfileButton(this.icon, this.text);
+  const ProfileButton(this.icon, this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +173,8 @@ class ProfileButton extends StatelessWidget {
 }
 
 class LogoutButton extends StatelessWidget {
+  const LogoutButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

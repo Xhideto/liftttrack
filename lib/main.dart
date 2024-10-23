@@ -6,6 +6,8 @@ import 'navigation/home.dart';
 void main() => runApp(LiftTrackApp());
 
 class LiftTrackApp extends StatelessWidget {
+  const LiftTrackApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,6 +21,8 @@ class LiftTrackApp extends StatelessWidget {
 }
 
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

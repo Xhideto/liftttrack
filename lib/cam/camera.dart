@@ -11,6 +11,8 @@ import 'dart:math';
 import 'dart:convert';
 
 class VideoPage extends StatefulWidget {
+  const VideoPage({super.key});
+
   @override
   _VideoPageState createState() => _VideoPageState();
 }
@@ -20,7 +22,7 @@ class _VideoPageState extends State<VideoPage> {
   File? _videoFile;
   final ImagePicker _picker = ImagePicker();
   List<File> _frames = [];
-  List<Map<String, dynamic>> _framesInBytes = [];
+  final List<Map<String, dynamic>> _framesInBytes = [];
 
   Future<void> _pickVideo() async {
     final pickedFile = await _picker.pickVideo(source: ImageSource.camera);
@@ -115,12 +117,12 @@ class _VideoPageState extends State<VideoPage> {
     List<Map<String, String>> frameTemplateList = [];
 
     // Convert _framesInBytes to JSON format using a template
-    _framesInBytes.forEach((frame) {
+    for (var frame in _framesInBytes) {
       frameTemplateList.add({
         'framePath': frame['framePath'], // Path to the frame file
         'frameBytes': base64Encode(frame['frameBytes']), // Encode bytes as base64 for JSON storage
       });
-    });
+    }
 
     // Serialize the list of frames to JSON
     final jsonData = jsonEncode({

@@ -113,6 +113,9 @@ class BenchPage extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => VideoPage())
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber[800],
+                  ),
                   child: Text(
                     'TEST CAMERA',
                     style: TextStyle(
@@ -120,9 +123,6 @@ class BenchPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.white, // Text color
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[800],
                   ),
                 ),
               ),
