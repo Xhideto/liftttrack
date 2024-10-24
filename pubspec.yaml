@@ -39,6 +39,9 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
   firebase_database: ^11.1.4
+  google_fonts: ^2.3.3
+  permission_handler: ^10.4.5
+  web_socket_channel: ^3.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -71,6 +74,10 @@ flutter:
   assets:
     - assets/gifs/
     - assets/images/
+    - assets/icons/exercise.png
+    - assets/icons/person.png
+    - assets/icons/exer.png
+    - assets/icons/progress.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -82,6 +89,10 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
+  fonts:
+    - family: Bebas Neue
+      fonts:
+        - asset: assets/fonts/BebasNeue-Regular.ttf
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

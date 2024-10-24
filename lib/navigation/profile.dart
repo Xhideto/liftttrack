@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:lifttrack/profile/ainfo.dart';
+import 'package:lifttrack/profile/changepass.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -35,19 +37,21 @@ class _ProfilePageState extends State<ProfilePage> {
         automaticallyImplyLeading: false, // Remove the back button
       ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            ProfileHeader(_image, _uploadImage),
-            const SizedBox(height: 20),
-            ProfileInfo(),
-            const SizedBox(height: 80),
-            ProfileButtons(),
-            const SizedBox(height: 40), // Add some space before the logout button
-            LogoutButton(),
-          ],
+      body: SingleChildScrollView( // Wrap the body in SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              ProfileHeader(_image, _uploadImage),
+              const SizedBox(height: 20),
+              ProfileInfo(),
+              const SizedBox(height: 80),
+              ProfileButtons(),
+              const SizedBox(height: 40), // Add some space before the logout button
+              LogoutButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -120,18 +124,42 @@ class ProfileButtons extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ProfileButton(Icons.account_circle, 'Account Information'),
-            ProfileButton(Icons.lock, 'Change your password'),
+            ProfileButton(
+              icon: Icons.account_circle,
+              text: 'Account Information',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountInfoPage()),
+                );
+              },
+            ),
+            ProfileButton(
+              icon: Icons.lock,
+              text: 'Change your password',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                );
+              },
+            ),
           ],
         ),
         const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ProfileButton(Icons.info, 'App instructions'),
+            ProfileButton(
+              icon: Icons.info,
+              text: 'App instructions',
+              onTap: () {
+                // Add logic for navigating to App instructions
+              },
+            ),
           ],
         ),
-        const SizedBox(height: 40), // Add some space before the logout button
+        const SizedBox(height: 40),
       ],
     );
   }
@@ -140,29 +168,33 @@ class ProfileButtons extends StatelessWidget {
 class ProfileButton extends StatelessWidget {
   final IconData icon;
   final String text;
+  final Function onTap; // Add an onTap function
 
-  ProfileButton(this.icon, this.text);
+  ProfileButton({required this.icon, required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 150,
-      decoration: BoxDecoration(
-        color: Colors.amber[800],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 40, color: Colors.white), // White icon
-          const SizedBox(height: 10),
-          Text(
-            text,
-            style: TextStyle(fontSize: 18, color: Colors.white), // White text
-            textAlign: TextAlign.center,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          color: Colors.amber[800],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Colors.white), // White icon
+            const SizedBox(height: 10),
+            Text(
+              text,
+              style: TextStyle(fontSize: 18, color: Colors.white), // White text
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -67,17 +67,26 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Image.asset('assets/icons/progress.png',
+            width: 24,
+            height: 24,
+          ),
           label: 'Progress',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
+          icon: Image.asset('assets/icons/exer.png',
+          width: 24,
+          height: 24,
+          ),
           label: 'Exercise',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Image.asset('assets/icons/person.png',
+            width: 24,
+            height: 24,
+          ),
           label: 'Profile',
         ),
       ],

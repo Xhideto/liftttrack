@@ -5,10 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_video_info/flutter_video_info.dart';
 import 'dart:math';
 import 'dart:convert';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:web_socket_channel/io.dart';
+import 'dart:typed_data';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -22,46 +24,104 @@ class _VideoPageState extends State<VideoPage> {
   List<File> _frames = [];
   List<Map<String, dynamic>> _framesInBytes = [];
 
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+
+    if (status.isDenied) {
+      // Request camera permission
+      if (await Permission.camera.request().isGranted) {
+        // Permission granted
+        _pickVideo(); // Call your function to record video
+      } else {
+        // Permission denied
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Camera permission is required to record video')),
+        );
+      }
+    } else if (status.isPermanentlyDenied) {
+      // Open settings to manually allow permission
+      openAppSettings();
+    } else {
+      // Permission already granted
+      _pickVideo();
+    }
+  }
+
   Future<void> _pickVideo() async {
-    final pickedFile = await _picker.pickVideo(source: ImageSource.camera);
-    if (pickedFile != null) {
-      setState(() {
-        _videoFile = File(pickedFile.path);
-      });
+    Future<void> _requestCameraPermission() async {
+      var status = await Permission.camera.status;
 
-      if (_videoFile != null) {
-        final videoOrientation = await FlutterVideoInfo().getVideoInfo(_videoFile!.path);
-        if (videoOrientation != null && videoOrientation.orientation == 90) {
-          // Rotate the video 90 degrees clockwise
-          final directory = await getApplicationDocumentsDirectory();
-          final outputFilePath = '${directory.path}/rotated_video.mp4';
-          final session = await FFmpegKit.executeAsync('-i ${_videoFile!.path} -vf transpose=1 $outputFilePath');
-          final returnCode = await session.getReturnCode();
-          if (ReturnCode.isSuccess(returnCode)) {
-            // Delete the original file
-            _videoFile?.delete();
+      if (status.isDenied) {
+        // Request camera permission
+        if (await Permission.camera.request().isGranted) {
+          // Permission granted
+          _pickVideo(); // Call your function to record video
+        } else {
+          // Permission denied
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Camera permission is required to record video')),
+          );
+        }
+      } else if (status.isPermanentlyDenied) {
+        // Open settings to manually allow permission
+        openAppSettings();
+      } else {
+        // Permission already granted
+        _pickVideo();
+      }
+    }
+    var status = await Permission.camera.request();
 
-            setState(() {
-              _videoFile = File(outputFilePath);
-            });
-          } else {
-            print('Failed to rotate video');
+    if (status.isGranted) {
+      // Permission granted, proceed with video recording
+      final pickedFile = await _picker.pickVideo(source: ImageSource.camera);
+      if (pickedFile != null) {
+        setState(() {
+          _videoFile = File(pickedFile.path);
+        });
+
+        if (_videoFile != null) {
+          final videoOrientation = await FlutterVideoInfo().getVideoInfo(_videoFile!.path);
+          if (videoOrientation != null && videoOrientation.orientation == 90) {
+            // Rotate the video 90 degrees clockwise
+            final directory = await getApplicationDocumentsDirectory();
+            final outputFilePath = '${directory.path}/rotated_video.mp4';
+            final session = await FFmpegKit.executeAsync('-i ${_videoFile!.path} -vf transpose=1 $outputFilePath');
+            final returnCode = await session.getReturnCode();
+            if (ReturnCode.isSuccess(returnCode)) {
+              // Delete the original file
+              _videoFile?.delete();
+
+              setState(() {
+                _videoFile = File(outputFilePath);
+              });
+            } else {
+              print('Failed to rotate video');
+            }
           }
         }
-      }
 
-      // Initialize the VideoPlayerController after video rotation
-      if (_videoFile != null) {
-        _controller = VideoPlayerController.file(_videoFile!)
-          ..initialize().then((_) async {
-            setState(() {});
-            if (_controller != null) {
-              _controller!.play();
-            }
-            // Automatically extract frames after video is loaded
-            await _extractFrames();
-          });
+        // Initialize the VideoPlayerController after video rotation
+        if (_videoFile != null) {
+          _controller = VideoPlayerController.file(_videoFile!)
+            ..initialize().then((_) async {
+              setState(() {});
+              if (_controller != null) {
+                _controller!.play();
+              }
+              // Automatically extract frames after video is loaded
+              await _extractFrames();
+            });
+        }
       }
+    } else if (status.isDenied) {
+      // Permission denied, show message
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Camera permission is required to record video'),
+      ));
+    } else if (status.isPermanentlyDenied) {
+      // Handle the case where the user has denied permission permanently
+      openAppSettings();
     }
   }
 
@@ -136,21 +196,27 @@ class _VideoPageState extends State<VideoPage> {
   Future<void> _uploadVideo() async {
     if (_videoFile == null) return;
 
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('YOUR_API_ENDPOINT'), // Replace with your actual API endpoint
-    );
-    request.files.add(await http.MultipartFile.fromPath(
-      'video',
-      _videoFile!.path,
-    ));
-    var response = await request.send();
+    // Create a WebSocket channel (replace 'ws://your-websocket-url' with your actual WebSocket endpoint)
+    final channel = IOWebSocketChannel.connect('ws://your-websocket-url');
 
-    if (response.statusCode == 200) {
-      print('Video uploaded successfully');
-    } else {
-      print('Video upload failed');
-    }
+    // Read the video file as bytes
+    Uint8List videoBytes = await _videoFile!.readAsBytes();
+
+    // Send the video file to the server via WebSocket
+    channel.sink.add(videoBytes);
+
+    // Listen for server response
+    channel.stream.listen((response) {
+      if (response == 'Video uploaded successfully') {
+        print('Video uploaded successfully');
+      } else {
+        print('Video upload failed');
+      }
+    }, onError: (error) {
+      print('WebSocket error: $error');
+    }, onDone: () {
+      print('WebSocket connection closed');
+    });
   }
 
   @override
