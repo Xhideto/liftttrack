@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lifttrack/exercise/exercard.dart';
+// import 'package:lifttrack/exercise/exercard.dart';
 import 'package:lifttrack/exercise/lower.dart';
 import 'package:lifttrack/exercise/upper.dart';
 
@@ -40,7 +40,7 @@ class ExercisePage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const UpperBodyPage()),
+                        MaterialPageRoute(builder: (context) => UpperBodyPage()),
                       );
                     },
                     child: Container(
@@ -69,7 +69,7 @@ class ExercisePage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LowerBodyPage()),
+                        MaterialPageRoute(builder: (context) => LowerBodyPage()),
                       );
                     },
                     child: Container(

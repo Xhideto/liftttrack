@@ -1,5 +1,6 @@
 // lib/upperex/pcurl.dart
 import 'package:flutter/material.dart';
+import 'package:lifttrack/cam/cameraPC.dart';
 
 class PreacherPage extends StatelessWidget {
   const PreacherPage({super.key});
@@ -106,7 +107,10 @@ class PreacherPage extends StatelessWidget {
                 width: 150, // Fixed width for the button
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add your tracking functionality here
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoPage())
+                    );
                   },
                   child: Text(
                     'TRACK',

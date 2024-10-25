@@ -40,7 +40,7 @@ class LowerBodyPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const RdlPage()),
+                        MaterialPageRoute(builder: (context) => RdlPage()),
                       );
                     },
                     child: Container(
@@ -69,7 +69,7 @@ class LowerBodyPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SquatPage()),
+                        MaterialPageRoute(builder: (context) => SquatPage()),
                       );
                     },
                     child: Container(

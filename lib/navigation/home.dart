@@ -39,21 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ProgressPage extends StatelessWidget {
-  const ProgressPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('PROGRESS', style: TextStyle(color: Colors.white)), // White text
-        backgroundColor: Colors.deepOrange.shade400,
-        elevation: 0,
-        automaticallyImplyLeading: false, // Remove the back button
-      ),
-    );
-  }
-}
+// class ProgressPage extends StatelessWidget {
+//   const ProgressPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('PROGRESS', style: TextStyle(color: Colors.white)), // White text
+//         backgroundColor: Colors.deepOrange.shade400,
+//         elevation: 0,
+//         automaticallyImplyLeading: false, // Remove the back button
+//       ),
+//     );
+//   }
+// }
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
@@ -67,17 +67,26 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Image.asset('assets/icons/progress.png',
+            width: 24,
+            height: 24,
+          ),
           label: 'Progress',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
+          icon: Image.asset('assets/icons/exer.png',
+            width: 24,
+            height: 24,
+          ),
           label: 'Exercise',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Image.asset('assets/icons/person.png',
+            width: 24,
+            height: 24,
+          ),
           label: 'Profile',
         ),
       ],

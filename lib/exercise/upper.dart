@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lifttrack/upperex/bpress.dart';
 import 'package:lifttrack/upperex/pcurl.dart';
 import 'package:lifttrack/upperex/spress.dart';
-import 'exercard.dart'; // Import the ExerciseCard
+// import 'exercard.dart'; // Import the ExerciseCard
 
 class UpperBodyPage extends StatelessWidget {
   const UpperBodyPage({super.key});
@@ -42,7 +42,7 @@ class UpperBodyPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const BenchPage()),
+                        MaterialPageRoute(builder: (context) => BenchPage()),
                       );
                     },
                     child: Container(
@@ -71,7 +71,7 @@ class UpperBodyPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ShoulderPage()),
+                        MaterialPageRoute(builder: (context) => ShoulderPage()),
                       );
                     },
                     child: Container(
@@ -100,7 +100,7 @@ class UpperBodyPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const PreacherPage()),
+                        MaterialPageRoute(builder: (context) => PreacherPage()),
                       );
                     },
                     child: Container(

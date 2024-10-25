@@ -1,5 +1,6 @@
 // lib/upperex/bpress.dart
 import 'package:flutter/material.dart';
+import 'package:lifttrack/cam/cameraS.dart';
 
 class SquatPage extends StatelessWidget {
   const SquatPage({super.key});
@@ -108,7 +109,10 @@ class SquatPage extends StatelessWidget {
                 width: 150, // Fixed width for the button
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add your tracking functionality here
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoPage())
+                    );
                   },
                   child: Text(
                     'TRACK',

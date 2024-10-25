@@ -45,7 +45,7 @@ class BenchPage extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               '     Lie flat on the bench with your feet planted, core engaged, and grip the bar slightly wider than shoulder-width apart.\n\n'
-              '     Maintain a neutral spine throughout the lift as you lower the bar to your sternum.',
+                  '     Maintain a neutral spine throughout the lift as you lower the bar to your sternum.',
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black, // Text color
@@ -110,7 +110,7 @@ class BenchPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const VideoPage())
+                        MaterialPageRoute(builder: (context) => VideoPage())
                     );
                   },
                   child: Text(

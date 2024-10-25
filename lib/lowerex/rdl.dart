@@ -1,5 +1,6 @@
 // lib/upperex/bpress.dart
 import 'package:flutter/material.dart';
+import 'package:lifttrack/cam/cameraRDL.dart';
 
 class RdlPage extends StatelessWidget {
   const RdlPage({super.key});
@@ -108,7 +109,10 @@ class RdlPage extends StatelessWidget {
                 width: 150, // Fixed width for the button
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add your tracking functionality here
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoPage())
+                    );
                   },
                   child: Text(
                     'TRACK',
