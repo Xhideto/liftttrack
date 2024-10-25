@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'exer.dart'; // Import the ExercisePage
 import 'profile.dart'; // Import the ProfilePage
-// import 'progress.dart';
+import 'progress.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,21 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ProgressPage extends StatelessWidget {
-  const ProgressPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('PROGRESS', style: TextStyle(color: Colors.white)), // White text
-        backgroundColor: Colors.deepOrange.shade400,
-        elevation: 0,
-        automaticallyImplyLeading: false, // Remove the back button
-      ),
-    );
-  }
-}
+// class ProgressPage extends StatelessWidget {
+//   const ProgressPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('PROGRESS', style: TextStyle(color: Colors.white)), // White text
+//         backgroundColor: Colors.deepOrange.shade400,
+//         elevation: 0,
+//         automaticallyImplyLeading: false, // Remove the back button
+//       ),
+//     );
+//   }
+// }
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
