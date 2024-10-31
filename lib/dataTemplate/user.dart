@@ -53,7 +53,7 @@ Future<User> createUser(
   final client = http.Client();
   try {
     final response = await client.put(
-      Uri.parse('http://192.168.1.233:8000/user/create'),
+      Uri.parse('http://127.0.0.1:8000'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
