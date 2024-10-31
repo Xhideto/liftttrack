@@ -11,11 +11,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   File? _image;
-  final ImagePicker _picker = ImagePicker();
 
-  // User data placeholders; replace with actual data source
-  String name = "John Doe";
-  String username = "johndoe";
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> _uploadImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -32,27 +29,25 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PROFILE', style: TextStyle(color: Colors.white)),
+        title: Text('PROFILE', style: TextStyle(color: Colors.white)), // White text
         backgroundColor: Colors.deepOrange.shade400,
         elevation: 3,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              ProfileHeader(_image, _uploadImage),
-              const SizedBox(height: 20),
-              ProfileInfo(name: name, username: username),
-              const SizedBox(height: 80),
-              ProfileButtons(),
-              const SizedBox(height: 40),
-              LogoutButton(),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            ProfileHeader(_image, _uploadImage),
+            const SizedBox(height: 20),
+            ProfileInfo(),
+            const SizedBox(height: 80),
+            ProfileButtons(),
+            const SizedBox(height: 40), // Add some space before the logout button
+            LogoutButton(),
+          ],
         ),
       ),
     );
@@ -79,10 +74,10 @@ class ProfileHeader extends StatelessWidget {
                 backgroundColor: const Color(0xFFFF7043),
                 child: _image != null
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(40),
-                        child: Image.file(_image!, fit: BoxFit.cover),
-                      )
-                    : Icon(Icons.person, size: 50, color: Colors.white),
+                  borderRadius: BorderRadius.circular(40),
+                  child: Image.file(_image!, fit: BoxFit.cover),
+                )
+                    : Icon(Icons.person, size: 50, color: Colors.white), // White icon
               ),
               Positioned(
                 bottom: 0,
@@ -91,10 +86,10 @@ class ProfileHeader extends StatelessWidget {
                   height: 20,
                   width: 20,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD32F2F),
+                    color: const Color(0xFFD32F2F), // Dark red background
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(Icons.edit, size: 15, color: Colors.white),
+                  child: Icon(Icons.edit, size: 15, color: Colors.white), // White icon
                 ),
               ),
             ],
@@ -106,23 +101,14 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileInfo extends StatelessWidget {
-  final String name;
-  final String username;
-
-  const ProfileInfo({required this.name, required this.username, super.key});
+  const ProfileInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          name,
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        ),
-        Text(
-          username,
-          style: TextStyle(fontSize: 16, color: Colors.black),
-        ),
+        const Text('Name', style: TextStyle(fontSize: 20, color: Colors.black)), // Black text
+        const Text('Username', style: TextStyle(fontSize: 16, color: Colors.black)), // Black text
       ],
     );
   }
@@ -138,29 +124,18 @@ class ProfileButtons extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ProfileButton(
-              icon: Icons.account_circle,
-              text: 'Account Information',
-              route: '/account_information',
-            ),
-            ProfileButton(
-              icon: Icons.lock,
-              text: 'Change your password',
-              route: '/forget_password',
-            ),
+            ProfileButton(Icons.account_circle, 'Account Information'),
+            ProfileButton(Icons.lock, 'Change your password'),
           ],
         ),
         const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ProfileButton(
-              icon: Icons.info,
-              text: 'App instructions',
-              route: '/app_instructions',
-            ),
+            ProfileButton(Icons.info, 'App instructions'),
           ],
         ),
+        const SizedBox(height: 40), // Add some space before the logout button
       ],
     );
   }
@@ -169,38 +144,29 @@ class ProfileButtons extends StatelessWidget {
 class ProfileButton extends StatelessWidget {
   final IconData icon;
   final String text;
-  final String route;
 
-  const ProfileButton({
-    required this.icon,
-    required this.text,
-    required this.route,
-    super.key,
-  });
+  const ProfileButton(this.icon, this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, route),
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          color: Colors.amber[800],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 40, color: Colors.white),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: TextStyle(fontSize: 18, color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+    return Container(
+      width: 150,
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.amber[800],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 40, color: Colors.white), // White icon
+          const SizedBox(height: 10),
+          Text(
+            text,
+            style: TextStyle(fontSize: 18, color: Colors.white), // White text
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -215,7 +181,7 @@ class LogoutButton extends StatelessWidget {
       width: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushReplacementNamed(context, '/main');
+          Navigator.pushReplacementNamed(context, '/login');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

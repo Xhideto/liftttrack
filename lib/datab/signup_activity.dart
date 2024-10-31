@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import '../dataTemplate/user.dart'; // Import the User class and createUser function
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
@@ -12,41 +11,6 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController confirmPasswordController = TextEditingController();
 
   SignUpScreen({super.key});
-
-  Future<void> createUser(
-    String firstName,
-    String lastName,
-    String username,
-    String contactNumber,
-    String email,
-    String password,
-  ) async {
-    final url = Uri.parse('http://127.0.0.1:8000/user/create');
-
-    try {
-      final response = await http.put(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          "fname": firstName,
-          "lname": lastName,
-          "username": username,
-          "phoneNum": contactNumber,
-          "email": email,
-          "password": password,
-        }),
-      );
-
-      if (response.statusCode == 201) {
-        print('User created successfully!');
-      } else {
-        final errorMessage = json.decode(response.body)['msg'] ?? 'Failed to create user';
-        throw Exception(errorMessage);
-      }
-    } catch (e) {
-      throw Exception('Error creating user: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +85,7 @@ class SignUpScreen extends StatelessWidget {
                           );
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to create user: $e')),
+                            SnackBar(content: Text('Failed to create user.')),
                           );
                         }
                       } else {
