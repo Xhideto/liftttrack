@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'datab/signup_activity.dart';
 import 'navigation/home.dart';
 
