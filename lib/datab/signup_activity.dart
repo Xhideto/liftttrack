@@ -14,6 +14,7 @@ class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
   Future<void> createUser(
+    BuildContext context,
     String firstName,
     String lastName,
     String username,
@@ -38,13 +39,20 @@ class SignUpScreen extends StatelessWidget {
       );
 
       if (response.statusCode == 201) {
-        print('User created successfully!');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User created successfully!')),
+        );
+        Navigator.pushReplacementNamed(context, '/login'); // Navigate to login after signup
       } else {
         final errorMessage = json.decode(response.body)['msg'] ?? 'Failed to create user';
-        throw Exception(errorMessage);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
       }
     } catch (e) {
-      throw Exception('Error creating user: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating user: $e')),
+      );
     }
   }
 
@@ -85,11 +93,13 @@ class SignUpScreen extends StatelessWidget {
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(labelText: 'Email'),
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 10),
                   TextFormField(
                     controller: contactNumberController,
                     decoration: InputDecoration(labelText: 'Contact Number'),
+                    keyboardType: TextInputType.phone,
                   ),
                   SizedBox(height: 10),
                   TextFormField(
@@ -107,21 +117,25 @@ class SignUpScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       if (passwordController.text == confirmPasswordController.text) {
-                        try {
-                          await createUser(
-                            firstNameController.text,
-                            lastNameController.text,
-                            usernameController.text,
-                            contactNumberController.text,
-                            emailController.text,
-                            passwordController.text,
-                          );
+                        if (passwordController.text.length >= 6) {
+                          try {
+                            await createUser(
+                              context,
+                              firstNameController.text,
+                              lastNameController.text,
+                              usernameController.text,
+                              contactNumberController.text,
+                              emailController.text,
+                              passwordController.text,
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to create user: $e')),
+                            );
+                          }
+                        } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('User created successfully!')),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to create user: $e')),
+                            SnackBar(content: Text('Password must be at least 6 characters.')),
                           );
                         }
                       } else {
