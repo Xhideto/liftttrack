@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:io';
+import '../datab/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,12 +12,29 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final ApiService _apiService = ApiService();
   File? _image;
   final ImagePicker _picker = ImagePicker();
 
-  // User data placeholders; replace with actual data source
-  String name = "John Doe";
-  String username = "johndoe";
+  // User data placeholders; will load from storage
+  String name = "Loading...";
+  String username = "loading...";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    // Fetch username and other details from secure storage
+    String? storedUsername = await _storage.read(key: 'username');
+    setState(() {
+      username = storedUsername ?? "unknown";
+      name = "Developer"; // Example - customize as per real user info
+    });
+  }
 
   Future<void> _uploadImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -26,6 +45,11 @@ class _ProfilePageState extends State<ProfilePage> {
         _image = null;
       }
     });
+  }
+
+  Future<void> _logout() async {
+    await _storage.deleteAll(); // Clear stored user data
+    Navigator.pushReplacementNamed(context, '/login'); // Redirect to login
   }
 
   @override
@@ -50,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 80),
               ProfileButtons(),
               const SizedBox(height: 40),
-              LogoutButton(),
+              LogoutButton(onLogout: _logout), // Updated logout button
             ],
           ),
         ),
@@ -207,15 +231,17 @@ class ProfileButton extends StatelessWidget {
 }
 
 class LogoutButton extends StatelessWidget {
-  const LogoutButton({super.key});
+  final Future<void> Function() onLogout;
+
+  const LogoutButton({required this.onLogout, super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200,
       child: GestureDetector(
-        onTap: () {
-          Navigator.pushReplacementNamed(context, '/main');
+        onTap: () async {
+          await onLogout();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

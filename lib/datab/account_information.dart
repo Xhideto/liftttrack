@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
 class AccountInformationScreen extends StatefulWidget {
@@ -10,45 +11,57 @@ class AccountInformationScreen extends StatefulWidget {
 }
 
 class _AccountInformationScreenState extends State<AccountInformationScreen> {
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
-  Map<String, dynamic> userData = {}; // Store user data
+  String username = '';
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
+    _initializeUser();
+  }
+
+  // Load username and fetch user data
+  Future<void> _initializeUser() async {
+    String? storedUsername = await _storage.read(key: 'username');
+    if (storedUsername != null) {
+      setState(() {
+        username = storedUsername;
+      });
+      await _fetchUserData();
+    }
   }
 
   // Fetch user data from API
   Future<void> _fetchUserData() async {
-    final username = 'exampleUser'; // Replace with the dynamic username
     final url = Uri.parse('http://127.0.0.1:8000/user/$username');
 
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
+        final userData = json.decode(response.body);
         setState(() {
-          userData = json.decode(response.body);
           firstNameController.text = userData['fname'] ?? '';
           lastNameController.text = userData['lname'] ?? '';
           emailController.text = userData['email'] ?? '';
           phoneController.text = userData['phoneNum'] ?? '';
+          isLoading = false;
         });
       } else {
-        print('Failed to load user data');
+        _showSnackBar('Failed to load user data');
       }
     } catch (e) {
-      print('Error fetching user data: $e');
+      _showSnackBar('Error fetching user data: $e');
     }
   }
 
   // Update user information
   Future<void> _updateUserData() async {
-    final username = 'exampleUser'; // Replace with the dynamic username
     final url = Uri.parse('http://127.0.0.1:8000/user/$username');
 
     final updatedData = {
@@ -56,7 +69,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
       "lname": lastNameController.text,
       "email": emailController.text,
       "phoneNum": phoneController.text,
-      // Add other fields if necessary
     };
 
     try {
@@ -67,15 +79,20 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
       );
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Account information updated successfully!')),
-        );
+        _showSnackBar('Account information updated successfully!');
       } else {
-        print('Failed to update user data');
+        _showSnackBar('Failed to update user data');
       }
     } catch (e) {
-      print('Error updating user data: $e');
+      _showSnackBar('Error updating user data: $e');
     }
+  }
+
+  // Helper function to show SnackBar messages
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -84,46 +101,50 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
       appBar: AppBar(
         title: Text('Account Information'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextFormField(
-                  controller: firstNameController,
-                  decoration: InputDecoration(labelText: 'First Name'),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: lastNameController,
-                  decoration: InputDecoration(labelText: 'Last Name'),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TextFormField(
+                        controller: firstNameController,
+                        decoration: InputDecoration(labelText: 'First Name'),
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: lastNameController,
+                        decoration: InputDecoration(labelText: 'Last Name'),
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(labelText: 'Email'),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: phoneController,
+                        decoration: InputDecoration(labelText: 'Phone Number'),
+                        keyboardType: TextInputType.phone,
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _updateUserData,
+                        child: Text('Save Changes'),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: 'Email'),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: phoneController,
-                  decoration: InputDecoration(labelText: 'Phone Number'),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _updateUserData,
-                  child: Text('Save Changes'),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -5,9 +5,9 @@ import 'navigation/home.dart';
 import 'datab/forget_password.dart';
 import 'datab/account_information.dart';
 import 'datab/app_instructions.dart';
+import 'datab/api_service.dart';
 
 void main() => runApp(LiftTrackApp());
-
 class LiftTrackApp extends StatelessWidget {
   const LiftTrackApp({super.key});
 
@@ -16,6 +16,7 @@ class LiftTrackApp extends StatelessWidget {
     return MaterialApp(
       home: LoginScreen(),
       routes: {
+        '/login': (context) => LoginScreen(),  // Ensure /login route exists
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
         '/forget_password': (context) => ForgotPasswordScreen(),
@@ -25,9 +26,8 @@ class LiftTrackApp extends StatelessWidget {
     );
   }
 }
-
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -36,6 +36,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final ApiService _apiService = ApiService();
   bool isLoading = false;
   String connectionMessage = "Checking API connection...";
 
@@ -45,13 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
     _checkApiConnection();
   }
 
-  // Check API connectivity
   Future<void> _checkApiConnection() async {
-    final url = Uri.parse('http://127.0.0.1:8000/'); // Root endpoint of the API
-
+    final url = Uri.parse('http://127.0.0.1:8000/');
     try {
       final response = await http.get(url);
-
       if (response.statusCode == 200) {
         setState(() {
           connectionMessage = "Connected to API";
@@ -68,14 +66,27 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Login handler
   Future<void> _login() async {
     setState(() {
       isLoading = true;
     });
 
-    // Hardcoded username and password check
-    if (usernameController.text == "dev" && passwordController.text == "dev") {
+    final username = usernameController.text;
+    final password = passwordController.text;
+
+    // Bypass login if username and password are "dev"
+    if (username == "dev" && password == "dev") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+      return;
+    }
+
+    // Regular login flow using ApiService
+    final userData = await _apiService.getUser(username);
+    if (userData != null && userData['password'] == password) {
+      await _apiService.saveUserData(username); // Store user data on successful login
       setState(() {
         isLoading = false;
       });

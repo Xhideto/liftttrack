@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
 
-  ForgotPasswordScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();
+  }
 
+  // Load the username from secure storage if the user is logged in
+  Future<void> _loadUsername() async {
+    String? storedUsername = await _storage.read(key: 'username');
+    if (storedUsername != null) {
+      setState(() {
+        usernameController.text = storedUsername;
+      });
+    }
+  }
+
+  // Reset password
   Future<void> resetPassword(BuildContext context) async {
     final username = usernameController.text;
     final newPassword = newPasswordController.text;
@@ -35,7 +59,7 @@ class ForgotPasswordScreen extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Password reset successfully!")),
         );
-        Navigator.pop(context);
+        Navigator.pop(context); // Go back to previous screen
       } else {
         final message = json.decode(response.body)['msg'] ?? 'Failed to reset password';
         ScaffoldMessenger.of(context).showSnackBar(
@@ -79,6 +103,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   TextFormField(
                     controller: usernameController,
                     decoration: InputDecoration(labelText: 'Username'),
+                    readOnly: usernameController.text.isNotEmpty, // Make read-only if prefilled
                   ),
                   SizedBox(height: 10),
                   TextFormField(
